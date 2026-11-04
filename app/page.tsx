@@ -19,7 +19,7 @@ import {DEFAULT_VISIBLE,SYSTEMS,EXPLANATIONS,explanation,type Atlas,type Concept
  ];
 export default function Home(){
  const detailTitle=useRef<HTMLHeadingElement>(null);
- const [darkMode,setDarkMode]=useState(false),[featureSlide,setFeatureSlide]=useState(0);
+ const [darkMode,setDarkMode]=useState(false),[featureSlide,setFeatureSlide]=useState(0),[bannerVisible,setBannerVisible]=useState(true);
  const [atlas,setAtlas]=useState<Atlas|null>(null),[state,setState]=useState(initial),[progress,setProgress]=useState(0),[error,setError]=useState(''),[panel,setPanel]=useState<'layers'|'search'|null>(null),[details,setDetails]=useState(false),[query,setQuery]=useState(''),[chosen,setChosen]=useState<Concept|null>(null);
  useEffect(()=>{const timer=window.setInterval(()=>setFeatureSlide(current=>(current+1)%featureSlides.length),5200);return()=>window.clearInterval(timer);},[]);
  useEffect(()=>{document.documentElement.classList.toggle('dark',darkMode);document.documentElement.style.colorScheme=darkMode?'dark':'light';return()=>{document.documentElement.classList.remove('dark');document.documentElement.style.colorScheme='light';};},[darkMode]);
@@ -40,11 +40,12 @@ export default function Home(){
  return <main className="studio">
   {atlas&&<AnatomyScene atlas={atlas} state={{...state,inspectorOpen:details&&selectedParts.length>0}} onSelect={choosePart} onProgress={n=>{setProgress(n);if(n===100)setError('');}} onError={setError}/>}
   <div className="vignette"/>
-  <section className={`feature-banner ${featureSlides[featureSlide].tone}`} aria-label="New features" aria-live="polite">
-   <div className="feature-icon" aria-hidden="true">{(()=>{const Icon=featureSlides[featureSlide].icon;return <Icon size={17}/>})()}</div>
-   <div className="feature-copy"><span className="feature-eyebrow">{featureSlides[featureSlide].eyebrow}</span><strong>{featureSlides[featureSlide].title}</strong><span>{featureSlides[featureSlide].copy}</span></div>
-   <div className="feature-dots" role="tablist" aria-label="Feature slides">{featureSlides.map((slide,index)=><button key={slide.title} type="button" role="tab" aria-selected={featureSlide===index} aria-label={`Show ${slide.title}`} className={featureSlide===index?'active':''} onClick={()=>setFeatureSlide(index)}/>)}</div>
-  </section>
+{bannerVisible&&<section className={`feature-banner ${featureSlides[featureSlide].tone}`} aria-label="New features" aria-live="polite">
+ <div className="feature-icon" aria-hidden="true">{(()=>{const Icon=featureSlides[featureSlide].icon;return <Icon size={17}/>})()}</div>
+ <div className="feature-copy"><span className="feature-eyebrow">{featureSlides[featureSlide].eyebrow}</span><strong>{featureSlides[featureSlide].title}</strong><span>{featureSlides[featureSlide].copy}</span></div>
+ <div className="feature-dots" role="tablist" aria-label="Feature slides">{featureSlides.map((slide,index)=><button key={slide.title} type="button" role="tab" aria-selected={featureSlide===index} aria-label={`Show ${slide.title}`} className={featureSlide===index?'active':''} onClick={()=>setFeatureSlide(index)}/>)}</div>
+ <button type="button" className="feature-close" onClick={()=>setBannerVisible(false)} aria-label="Close feature banner">×</button>
+ </section>}
   <header className="identity"><div className="eyebrow"><span className="status-dot"/> INTERACTIVE BIOLOGY</div><h1>Lumenbody<Badge variant="outline" className="edition">3D</Badge></h1><div className="identity-meta">{atlas?atlas.parts.length.toLocaleString():'2,234'} modeled pieces <span>·</span> BodyParts3D</div></header>
   <nav className="top-actions" aria-label="Explorer panels"><Button variant="ghost" className={panel==='search'?'active':''} onClick={()=>openPanel('search')} aria-label="Search anatomy"><Search size={18}/><span>Find a structure</span><kbd>/</kbd></Button><div className="theme-toggle"><input type="checkbox" id="checkboxInput" checked={darkMode} onChange={e=>setDarkMode(e.target.checked)} aria-label="Toggle dark mode"/><label htmlFor="checkboxInput" className="toggleSwitch" title={darkMode?'Switch to light mode':'Switch to dark mode'}/></div></nav>
   <section className={`layers-panel glass ${panel==='layers'?'mobile-open':''}`} aria-label="Anatomical layers">
