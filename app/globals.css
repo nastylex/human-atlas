@@ -100,3 +100,8 @@ h1 .edition{font-family:inherit;font-weight:500;font-size:10px;letter-spacing:.0
 @media(max-width:1100px) and (min-width:768px){.feature-banner{width:420px;min-width:0}.feature-copy>span:last-child{display:none}}
 @media(max-width:767px){.feature-banner{top:75px;width:calc(100% - 28px);min-width:0;padding:10px 11px;gap:9px}.feature-icon{width:29px;height:29px;flex-basis:29px}.feature-copy{display:grid;gap:2px;line-height:1.15}.feature-copy strong{font-size:12px}.feature-copy>span:last-child{font-size:10px}.feature-dots{gap:4px}.feature-dots button{width:5px;height:5px}.feature-dots button.active{width:14px}}
 @media(prefers-reduced-motion:reduce){.feature-banner{animation:none}}
+
+/* Keep the mobile canvas focused on anatomy and its primary controls. */
+@media(max-width:767px){
+ .feature-banner,.studio-footer,.scene-caption,.identity-meta{display:none}
+}
